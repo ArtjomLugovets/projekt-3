@@ -1,0 +1,25 @@
+#world {
+	position: relative;
+	width: 800px;
+	height: 600px;
+	border: 2px solid black;
+}
+
+.player {
+	position: absolute;
+	text-align: center;
+}
+
+.player img {
+	width: 32px;
+	height: 32px;
+	image-rendering: pixelated;
+}
+
+.bubble {
+	background: white;
+	border-radius: 7px;
+	padding: 4px;
+	font-size: 12px;
+	margin-bottom: 10px;
+}
