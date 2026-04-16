@@ -1,8 +1,23 @@
+body {
+	margin: 0;
+	background: #6475be;
+	font-family: Arial, sans-serif;
+	color: white;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
 #world {
 	position: relative;
 	width: 800px;
 	height: 600px;
 	border: 2px solid black;
+	border-radius: 20px;
+	left: 515px;
+	top: 200px;
+	background-color: rgba(231, 177, 177, 0.664);
+	margin-top: 20px;
 }
 
 .player {
@@ -22,4 +37,37 @@
 	padding: 4px;
 	font-size: 12px;
 	margin-bottom: 10px;
+	color: black;
+}
+
+#gameWrapper {
+	display: flex;
+	gap: 20px;
+}
+
+#panel {
+	width: 200px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+h2 {
+	align-self: center;
+}
+
+button {
+	padding: 10px;
+	border: none;
+	border-radius: 8px;
+	background: #253044;
+	color: white;
+	cursor: pointer;
+}
+
+input {
+	padding: 10px;
+	border-radius: 8px;
+	border: none;
+	outline: none;
 }

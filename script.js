@@ -3,7 +3,6 @@ const world = document.getElementById("world");
 async function loadWorld() {
   const response = await fetch("https://tinkr.tech/sdb/Artjom/wanderworld");
   const data = await response.json();
-
   render(data);
 }
 
@@ -25,7 +24,7 @@ function render(state) {
     }
 
     const img = document.createElement("img");
-    img.src = player.image;
+    img.src = "https://tinkr.tech" + player.image;
     div.appendChild(img);
 
     const name = document.createElement("div");
@@ -33,57 +32,92 @@ function render(state) {
     div.appendChild(name);
 
     world.appendChild(div);
-
   }
 }
 
-async function join() {
-  const response = await fetch("https://tinkr.tech/sdb/Artjom/wanderworld", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "join",
-      username: "Artjom"
-    })
-  });
+async function init() {
+  let key = localStorage.getItem("key");
+  let username = localStorage.getItem("username");
 
-  const data = await response.json();
+  if (!username) {
+    username = "Artjom_" + Math.floor(Math.random() * 1000);
+    localStorage.setItem("username", username);
+  }
 
-  localStorage.setItem("key", data.player_key);
+  if (!key || key === "undefined" || key === "null") {
+    const response = await fetch("https://tinkr.tech/sdb/Artjom/wanderworld", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "join",
+        username: username
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.player_key) {
+      localStorage.setItem("key", data.player_key);
+    } else {
+      return;
+    }
+  }
+
+  setInterval(loadWorld, 1000);
 }
 
-world.addEventListener("click", (e) => {
-  fetch("https://tinkr.tech/sdb/Artjom/wanderworld", {
+world.addEventListener("click", async (e) => {
+  const key = localStorage.getItem("key");
+
+  if (!key || key === "undefined") return;
+
+  await fetch("https://tinkr.tech/sdb/Artjom/wanderworld", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
       action: "move",
-      player_key: localStorage.getItem("key"),
+      player_key: key,
       x: e.offsetX,
       y: e.offsetY
     })
   });
 
   loadWorld();
-})
+});
 
 async function talk(text) {
-  const response = await fetch("https://tinkr.tech/sdb/Artjom/wanderworld", {
+  const key = localStorage.getItem("key");
+
+  if (!key) return;
+
+  await fetch("https://tinkr.tech/sdb/Artjom/wanderworld", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
       action: "talk",
-      player_key: localStorage.getItem("key"),
+      player_key: key,
       message: text
     })
   });
 }
-console.log(localStorage.getItem("key"));
-join();
-loadWorld();
+
+function sendMessage() {
+  const input = document.getElementById("msg");
+  if (!input.value) return;
+
+  talk(input.value);
+  input.value = "";
+}
+
+function clearSave() {
+  localStorage.clear();
+  location.reload();
+}
+
+init();
