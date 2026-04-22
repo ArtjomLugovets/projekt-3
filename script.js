@@ -40,7 +40,7 @@ async function init() {
   let username = localStorage.getItem("username");
 
   if (!username) {
-    username = "Artjom_" + Math.floor(Math.random() * 1000);
+    username = "Chill Guy_" + Math.floor(Math.random() * 1000);
     localStorage.setItem("username", username);
   }
 
