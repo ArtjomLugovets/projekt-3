@@ -1,4 +1,6 @@
 const world = document.getElementById("world");
+const tilesLayer = document.getElementById("tiles");
+const playersLayer = document.getElementById("players");
 
 async function loadWorld() {
   const response = await fetch("https://tinkr.tech/sdb/Artjom/wanderworld");
@@ -7,7 +9,7 @@ async function loadWorld() {
 }
 
 function render(state) {
-  world.innerHTML = "";
+  playersLayer.innerHTML = "";
 
   for (const player of state.players) {
     const div = document.createElement("div");
@@ -30,10 +32,94 @@ function render(state) {
     const name = document.createElement("div");
     name.textContent = player.username;
     div.appendChild(name);
+    div.classList.add("nimi");
 
-    world.appendChild(div);
+    playersLayer.appendChild(div);
   }
 }
+
+const tiles = [
+  { x: 64, y: 64, img: "tree.png" },
+  { x: 128, y: 96, img: "tree.png" },
+  { x: 256, y: 64, img: "tree.png" },
+  { x: 320, y: 128, img: "tree.png" },
+  { x: 480, y: 96, img: "tree.png" },
+  { x: 544, y: 160, img: "tree.png" },
+  { x: 700, y: 100, img: "tree.png" },
+
+  { x: 100, y: 300, img: "tree.png" },
+  { x: 200, y: 350, img: "tree.png" },
+  { x: 300, y: 320, img: "tree.png" },
+  { x: 400, y: 360, img: "tree.png" },
+  { x: 500, y: 340, img: "tree.png" },
+  { x: 600, y: 300, img: "tree.png" },
+
+  { x: 50, y: 500, img: "tree.png" },
+  { x: 150, y: 520, img: "tree.png" },
+  { x: 250, y: 500, img: "tree.png" },
+  { x: 350, y: 520, img: "tree.png" },
+  { x: 450, y: 500, img: "tree.png" },
+  { x: 550, y: 520, img: "tree.png" },
+  { x: 650, y: 500, img: "tree.png" },
+
+  { x: 320, y: 200, img: "water.png" },
+  { x: 352, y: 200, img: "water.png" },
+  { x: 384, y: 200, img: "water.png" },
+
+  { x: 320, y: 232, img: "water.png" },
+  { x: 352, y: 232, img: "water.png" },
+  { x: 384, y: 232, img: "water.png" },
+
+  { x: 320, y: 264, img: "water.png" },
+  { x: 352, y: 264, img: "water.png" },
+  { x: 384, y: 264, img: "water.png" },
+
+
+  { x: 100, y: 190, img: "house.png" },
+  { x: 600, y: 150, img: "house.png" },
+  { x: 400, y: 440, img: "house.png" },
+
+
+  { x: 0, y: 224, img: "path.png" },
+  { x: 32, y: 224, img: "path.png" },
+  { x: 64, y: 224, img: "path.png" },
+  { x: 96, y: 224, img: "path.png" },
+
+  { x: 640, y: 0, img: "path.png" },
+  { x: 640, y: 32, img: "path.png" },
+  { x: 640, y: 64, img: "path.png" },
+  { x: 640, y: 96, img: "path.png" },
+  { x: 640, y: 128, img: "path.png" },
+
+  { x: 400, y: 600 - 32, img: "path.png" },
+  { x: 400, y: 600 - 64, img: "path.png" },
+  { x: 400, y: 600 - 96, img: "path.png" },
+  { x: 400, y: 600 - 128, img: "path.png" }
+];
+
+
+function renderTiles() {
+  tilesLayer.innerHTML = "";
+
+  for (const tile of tiles) {
+    const img = document.createElement("img");
+
+    img.src = "https://tinkr.tech/sdb_apps/wanderworld/images/" + tile.img;
+
+    img.style.position = "absolute";
+    img.style.left = tile.x + "px";
+    img.style.top = tile.y + "px";
+
+    img.style.width = "32px";
+    img.style.height = "32px";
+
+    img.style.imageRendering = "pixelated";
+
+    tilesLayer.appendChild(img);
+  }
+}
+
+
 
 async function init() {
   let key = localStorage.getItem("key");
@@ -65,6 +151,7 @@ async function init() {
     }
   }
 
+  renderTiles();
   setInterval(loadWorld, 1000);
 }
 
@@ -117,6 +204,16 @@ function sendMessage() {
 
 function clearSave() {
   localStorage.clear();
+  location.reload();
+}
+
+function changeUser() {
+  const newName = prompt("Enter new username");
+
+  if (!newName || newName.trim() === "") return;
+
+  localStorage.setItem("username", newName);
+  localStorage.removeItem("key");
   location.reload();
 }
 
